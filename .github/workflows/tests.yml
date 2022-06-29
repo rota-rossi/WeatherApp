@@ -2,9 +2,9 @@ name: Run tests
 
 on:
   pull-request:
-  branches:
-    - main
-    - release
+    branches:
+      - main
+      - release
 
 uses: willcaul/jest-github-action@v2
 
