@@ -1,0 +1,12 @@
+name: Run tests
+
+on:
+  pull-request:
+  branches:
+    - main
+    - release
+
+uses: willcaul/jest-github-action@v2
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
