@@ -18,7 +18,7 @@
       "@semantic-release/exec",
       {
         "prepareCmd": "./utils/versioning_ios.sh ${nextRelease.version} && ./utils/versioning_android.sh ${nextRelease.version}",
-        "publishCmd": "cd ./android && ./gradlew bundleRelease"
+        "publishCmd": "cd ./android && ./gradlew bundleRelease && cd .."
       }
     ],
     [
@@ -26,7 +26,7 @@
       {
         "assets": [
           {
-            "dist": "android/app/build/outputs/bundle/release/app-release.aab",
+            "path": "android/app/build/outputs/bundle/release/app-release.aab",
             "label": "Android app release"
           }
         ]
