@@ -1,0 +1,31 @@
+{
+  "branches": [
+    {
+      "name": "release"
+    }
+  ],
+  "tagFormat": "${version}",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": false
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "./utils/versioning_ios.sh ${nextRelease.version}"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "./utils/versioning_android.sh ${nextRelease.version}"
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}
