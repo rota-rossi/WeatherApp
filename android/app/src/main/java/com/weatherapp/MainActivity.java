@@ -1,4 +1,4 @@
-package com.weatherapp;
+package net.weblers.weatherapp;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
