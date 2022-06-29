@@ -17,15 +17,20 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "./utils/versioning_ios.sh ${nextRelease.version}"
+        "prepareCmd": "./utils/versioning_ios.sh ${nextRelease.version} && ./utils/versioning_android.sh ${nextRelease.version}",
+        "publishCmd": "cd ./android && ./gradlew bundleRelease && cd .."
       }
     ],
     [
-      "@semantic-release/exec",
+      "@semantic-release/github",
       {
-        "prepareCmd": "./utils/versioning_android.sh ${nextRelease.version}"
+        "assets": [
+          {
+            "path": "android/app/build/outputs/bundle/release/app-release.aab",
+            "label": "Android app release"
+          }
+        ]
       }
-    ],
-    "@semantic-release/github"
+    ]
   ]
 }
