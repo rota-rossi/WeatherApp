@@ -1,7 +1,8 @@
 import {Text} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styled from 'styled-components/native';
-import {getLocalGeoInfo} from './api/weather';
+import {getCityforLocation, getForecastForLocation} from './api/weather';
+import {useLocation} from './hooks/useLocation';
 
 const Container = styled.SafeAreaView`
   width: 100%;
@@ -11,19 +12,35 @@ const Container = styled.SafeAreaView`
   justify-content: center;
 `;
 
+const InnerContainer = styled.ScrollView`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`;
+
 export const App = () => {
-  const [data, setData] = useState([]);
-  console.log(data);
+  const {location} = useLocation();
+  const [forecast, setForecast] = useState();
+  const [city, setCity] = useState();
   useEffect(() => {
-    getLocalGeoInfo().then(result => {
-      setData(result);
-      console.log(result);
-    });
-  }, []);
+    const getData = async () => {
+      if (location) {
+        const resultForecast = await getForecastForLocation(location);
+        setForecast(resultForecast);
+        const resultCity = await getCityforLocation(location);
+        setCity(resultCity);
+      }
+    };
+    getData();
+  }, [location]);
 
   return (
     <Container>
-      <Text>App</Text>
+      <InnerContainer>
+        <Text>App</Text>
+        <Text>{JSON.stringify(city, null, 2)}</Text>
+        <Text>{JSON.stringify(forecast, null, 2)}</Text>
+      </InnerContainer>
     </Container>
   );
 };
