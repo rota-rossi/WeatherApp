@@ -20,5 +20,8 @@ jobs:
         run: yarn
       - name: Release
         env:
+          WEATHERAPP_UPLOAD_KEY_PASSWORD: ${{ secrets.WEATHERAPP_UPLOAD_KEY_PASSWORD }}
+          WEATHERAPP_UPLOAD_KEY_ALIAS: ${{ secrets.WEATHERAPP_UPLOAD_KEY_ALIAS }}
+          WEATHERAPP_UPLOAD_STORE_PASSWORD: ${{ secrets.WEATHERAPP_UPLOAD_STORE_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx semantic-release

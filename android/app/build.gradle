@@ -223,12 +223,10 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('WEATHERAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(WEATHERAPP_UPLOAD_STORE_FILE)
-                storePassword WEATHERAPP_UPLOAD_STORE_PASSWORD
-                keyAlias WEATHERAPP_UPLOAD_KEY_ALIAS
-                keyPassword WEATHERAPP_UPLOAD_KEY_PASSWORD
-            }
+                storeFile file('release.keystore')
+                storePassword System.getenv("WEATHERAPP_UPLOAD_STORE_PASSWORD")
+                keyAlias System.getenv("WEATHERAPP_UPLOAD_KEY_ALIAS")
+                keyPassword System.getenv("WEATHERAPP_UPLOAD_KEY_PASSWORD")
         }
     }
     buildTypes {
