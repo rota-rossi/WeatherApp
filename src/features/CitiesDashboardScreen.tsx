@@ -1,9 +1,16 @@
-import {Text} from 'react-native';
 import React, {useEffect} from 'react';
-// import {useLocation} from 'hooks/useLocation';
-import {useAppSelector, useAppDispatch} from 'store';
-import {getCitiesAction} from 'store/slices/cities';
+import {useLocation} from 'hooks/useLocation';
+import {useAppDispatch} from 'store';
+import {
+  actionSetCurrentLocation,
+  citiesSelector,
+  getCitiesAction,
+} from 'store/slices/cities';
 import styled from 'styled-components/native';
+import {getCityforLocationAPI} from 'src/api/weather';
+import {GeoPosition} from 'react-native-geolocation-service';
+import CityItem from 'src/components/CityItem';
+import {useSelector} from 'react-redux';
 
 const Container = styled.SafeAreaView`
   width: 100%;
@@ -20,21 +27,19 @@ const InnerContainer = styled.ScrollView`
 `;
 
 export const CitiesDashboardScreen = () => {
-  // const {location} = useLocation();
-  const cities = useAppSelector(state => state.cities.cities);
+  const {location} = useLocation();
+  const cities = useSelector(citiesSelector);
   const dispatch = useAppDispatch();
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     if (location) {
-  //       const resultForecast = await getForecastForLocationAPI(location);
-  //       setForecast(resultForecast);
-  //       const resultCity = await getCityforLocationAPI(location);
-  //       setCity(resultCity);
-  //     }
-  //   };
-  //   getData();
-  // }, [location]);
+  useEffect(() => {
+    const retrieveCurrentCity = async (loc: GeoPosition) => {
+      const currentCity = await getCityforLocationAPI(loc);
+      dispatch(actionSetCurrentLocation(currentCity));
+    };
+    if (location) {
+      retrieveCurrentCity(location);
+    }
+  }, [location, dispatch]);
 
   useEffect(() => {
     dispatch(getCitiesAction());
@@ -43,8 +48,9 @@ export const CitiesDashboardScreen = () => {
   return (
     <Container>
       <InnerContainer>
-        <Text>App</Text>
-        <Text>{JSON.stringify(cities, null, 2)}</Text>
+        {cities.map(city => (
+          <CityItem city={city} key={city.name} />
+        ))}
       </InnerContainer>
     </Container>
   );

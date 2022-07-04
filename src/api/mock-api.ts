@@ -34,6 +34,7 @@ export const initializeMockServer = () => {
       });
 
       this.passthrough('/data/2.5/forecast');
+      this.passthrough('/data/2.5/weather');
       this.passthrough('/geo/1.0/reverse');
     },
   });
