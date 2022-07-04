@@ -11,10 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        - run: |
+      - uses: actions/checkout@v2
+      - run: |
           echo "${{ secrets.WEATHERAPP_RELEASE_KEYSTORE }}" > release.keystore.asc
-          gpg -d --passphrase "${{ secrets.WEATHERAPP_UPLOAD_KEY_PASSWORD }}" --batch release.keystore.asc > app/release.keystore
+          gpg --batch --passphrase "${{ secrets.WEATHERAPP_UPLOAD_KEY_PASSWORD }}" -d -o release.keystore release.keystore.asc
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
