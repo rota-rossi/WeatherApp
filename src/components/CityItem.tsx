@@ -34,7 +34,7 @@ const SecondaryTextContainer = styled.View`
   width: 100%;
   display: flex;
   flex-flow: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-top: 8px;
 `;
@@ -48,6 +48,7 @@ const CityLabel = styled.Text`
 const TemperatureLabel = styled.Text`
   font-size: 12px;
   line-height: 16px;
+  padding-right: 20px;
 `;
 
 const ArrowContainer = styled.View`
@@ -83,9 +84,11 @@ const CityItem: FC<ScreenProps> = ({city}) => {
         </CityLabel>
         {isSuccess && (
           <SecondaryTextContainer>
-            <TemperatureLabel>🌡: {currentForecast.main.temp}</TemperatureLabel>
             <TemperatureLabel>
-              💧: {currentForecast.main.humidity}
+              🌡: {Number(currentForecast.main.temp).toFixed()}°C
+            </TemperatureLabel>
+            <TemperatureLabel>
+              💧: {currentForecast.main.humidity}%
             </TemperatureLabel>
           </SecondaryTextContainer>
         )}
