@@ -13,6 +13,7 @@ module.exports = {
           hooks: './src/hooks',
           components: './src/components',
           features: './src/features',
+          assets: './assets',
         },
       },
     ],

@@ -19,7 +19,7 @@ const initialState: CitiesState = {
   error: undefined,
 };
 
-export const getCitiesAction = createAsyncThunk(
+export const actionGetCities = createAsyncThunk(
   'cities/getCities',
   async () => {
     const cities = await getCitiesAPI();
@@ -43,13 +43,13 @@ const citiesSlice = createSlice({
   },
   extraReducers: builder => {
     builder
-      .addCase(getCitiesAction.pending, state => {
+      .addCase(actionGetCities.pending, state => {
         state.isLoading = true;
       })
-      .addCase(getCitiesAction.fulfilled, (state, {payload}) => {
+      .addCase(actionGetCities.fulfilled, (state, {payload}) => {
         state.cities = payload;
       })
-      .addCase(getCitiesAction.rejected, (state, action) => {
+      .addCase(actionGetCities.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.error.message;
       });

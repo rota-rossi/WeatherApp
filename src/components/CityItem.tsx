@@ -1,13 +1,65 @@
-import {View, Text} from 'react-native';
 import React from 'react';
-import {City} from 'src/types/City';
+import {City} from 'types/City';
 import {FC} from 'react';
-import {useGetCurrentForecastQuery} from 'src/api/apiSlice';
 import styled from 'styled-components/native';
+import {useGetCurrentForecastQuery} from 'store/slices/api';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {WeatherIcon} from './WeatherIcon';
 
-const Image = styled.Image`
-  width: 40px;
-  height: 40px;
+const Container = styled.View`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  padding: 12px;
+  align-items: center;
+  background-color: white;
+  border-bottom-width: 1px;
+  border-bottom-color: lightgray;
+`;
+
+const ImageContainer = styled.View`
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const MainTextContainer = styled.View`
+  flex: 1;
+  padding: 8px 24px;
+`;
+
+const SecondaryTextContainer = styled.View`
+  width: 100%;
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+`;
+
+const CityLabel = styled.Text`
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 20px;
+`;
+
+const TemperatureLabel = styled.Text`
+  font-size: 12px;
+  line-height: 16px;
+`;
+
+const ArrowContainer = styled.View`
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const ArrowIcon = styled(Icon).attrs({name: 'chevron-right', size: 24})`
+  color: #1d1d1d;
 `;
 
 type ScreenProps = {
@@ -18,23 +70,30 @@ const CityItem: FC<ScreenProps> = ({city}) => {
     pollingInterval: 60000,
   });
 
-  const imageUri = isSuccess
-    ? `https://openweathermap.org/img/wn/${currentForecast.weather[0].icon}.png`
-    : '';
   return (
-    <View>
-      <Text>
-        {city.name}, {city.state ? `${city.state}, ` : ''} {city.country}
-      </Text>
+    <Container>
       {isSuccess && (
-        <>
-          <Image source={{uri: imageUri}} />
-          <Text>
-            {currentForecast.main.temp} - {currentForecast.main.humidity}
-          </Text>
-        </>
+        <ImageContainer>
+          <WeatherIcon icon={currentForecast.weather[0].icon as string} />
+        </ImageContainer>
       )}
-    </View>
+      <MainTextContainer>
+        <CityLabel>
+          {city.name}, {city.state ? `${city.state}, ` : ''} {city.country}
+        </CityLabel>
+        {isSuccess && (
+          <SecondaryTextContainer>
+            <TemperatureLabel>🌡: {currentForecast.main.temp}</TemperatureLabel>
+            <TemperatureLabel>
+              💧: {currentForecast.main.humidity}
+            </TemperatureLabel>
+          </SecondaryTextContainer>
+        )}
+      </MainTextContainer>
+      <ArrowContainer>
+        <ArrowIcon />
+      </ArrowContainer>
+    </Container>
   );
 };
 
