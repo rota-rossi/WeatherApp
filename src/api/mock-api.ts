@@ -12,7 +12,10 @@ export const initializeMockServer = () => {
   server = createServer({
     routes() {
       this.urlPrefix = config.weatherURL;
-      this.get('/geo/1.0/direct', async (_, request) => {
+      this.get('http://localhost:5000/cities', async () => {
+        return cities;
+      });
+      this.get('/geo/1.0/direct', (_, request) => {
         const query = request.queryParams?.q;
         if (query) {
           console.log({query});
@@ -29,7 +32,9 @@ export const initializeMockServer = () => {
           );
         }
       });
+
       this.passthrough('/data/2.5/forecast');
+      this.passthrough('/data/2.5/weather');
       this.passthrough('/geo/1.0/reverse');
     },
   });
