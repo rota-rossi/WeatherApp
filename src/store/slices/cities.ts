@@ -1,3 +1,7 @@
+// @ts-ignore
+import SQLiteStorage from 'redux-persist-sqlite-storage';
+import SQLite from 'react-native-sqlite-storage';
+import {persistReducer} from 'redux-persist';
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {getCitiesAPI} from 'api/weather';
 import {City} from 'types/City';
@@ -52,7 +56,21 @@ const citiesSlice = createSlice({
   },
 });
 
-export const citiesReducer = citiesSlice.reducer;
+const sqliteConfig = {
+  name: 'weatherapp-cities',
+  location: 'weatherapp.db',
+};
+
+SQLite.enablePromise(true);
+
+const storageEngine = SQLiteStorage(SQLite, sqliteConfig);
+
+const persistConfig = {
+  key: 'cities',
+  storage: storageEngine,
+};
+
+export const citiesReducer = persistReducer(persistConfig, citiesSlice.reducer);
 
 export const citiesSelector = (state: RootState) => state.cities.cities;
 

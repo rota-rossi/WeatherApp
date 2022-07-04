@@ -1,12 +1,15 @@
 import React from 'react';
 import {Provider} from 'react-redux';
-import {store} from './store';
+import {persistor, store} from './store';
 import {CitiesDashboardScreen} from 'features/CitiesDashboardScreen';
+import {PersistGate} from 'redux-persist/integration/react';
 
 export const App = () => {
   return (
     <Provider store={store}>
-      <CitiesDashboardScreen />
+      <PersistGate persistor={persistor}>
+        <CitiesDashboardScreen />
+      </PersistGate>
     </Provider>
   );
 };
