@@ -8,7 +8,7 @@ PLIST_BUDDY_COMMAND="/usr/libexec/PlistBuddy"
 if [ -f ${PLIST_BUDDY_COMMAND} ];
 then
   APP_NAME=`jq .name  app.json | sed 's/"//g'`
-  NEW_VERSION_NAME=$1
+  NEW_VERSION_NAME=`echo ${1} | sed 's/\-.*//g'`
   # to be generated using GH Action
   NEW_VERSION_CODE="${GITHUB_RUN_ID}${GITHUB_RUN_ATTEMPT}"
 
