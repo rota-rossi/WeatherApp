@@ -1,5 +1,5 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import {apiReducer, apiSlice} from 'api/apiSlice';
+import {apiReducer, apiSlice} from './slices/api';
 import {useDispatch} from 'react-redux';
 import {FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER} from 'redux-persist';
 import {persistStore} from 'redux-persist';

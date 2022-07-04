@@ -4,13 +4,15 @@ import {useAppDispatch} from 'store';
 import {
   actionSetCurrentLocation,
   citiesSelector,
-  getCitiesAction,
+  actionGetCities,
 } from 'store/slices/cities';
 import styled from 'styled-components/native';
 import {getCityforLocationAPI} from 'src/api/weather';
 import {GeoPosition} from 'react-native-geolocation-service';
 import CityItem from 'src/components/CityItem';
 import {useSelector} from 'react-redux';
+import {City} from 'src/types/City';
+import {FlatList, ListRenderItem} from 'react-native';
 
 const Container = styled.SafeAreaView`
   width: 100%;
@@ -18,12 +20,17 @@ const Container = styled.SafeAreaView`
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: white;
 `;
 
-const InnerContainer = styled.ScrollView`
+const InnerContainer = styled(
+  // FlatList as new (props: FlatListProps<City>) => FlatList<City>,
+  FlatList<City>,
+)`
   width: 100%;
   height: 100%;
   display: flex;
+  background-color: white;
 `;
 
 export const CitiesDashboardScreen = () => {
@@ -32,7 +39,7 @@ export const CitiesDashboardScreen = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getCitiesAction());
+    dispatch(actionGetCities());
   }, [dispatch]);
 
   useEffect(() => {
@@ -45,13 +52,11 @@ export const CitiesDashboardScreen = () => {
     }
   }, [location, dispatch, cities.length]);
 
+  const renderItem: ListRenderItem<City> = ({item}) => <CityItem city={item} />;
+
   return (
     <Container>
-      <InnerContainer>
-        {cities.map(city => (
-          <CityItem city={city} key={city.name} />
-        ))}
-      </InnerContainer>
+      <InnerContainer data={cities} renderItem={renderItem} />
     </Container>
   );
 };
