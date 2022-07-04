@@ -32,18 +32,18 @@ export const CitiesDashboardScreen = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    dispatch(getCitiesAction());
+  }, [dispatch]);
+
+  useEffect(() => {
     const retrieveCurrentCity = async (loc: GeoPosition) => {
       const currentCity = await getCityforLocationAPI(loc);
       dispatch(actionSetCurrentLocation(currentCity));
     };
-    if (location) {
+    if (location && cities.length > 0) {
       retrieveCurrentCity(location);
     }
-  }, [location, dispatch]);
-
-  useEffect(() => {
-    dispatch(getCitiesAction());
-  }, [dispatch]);
+  }, [location, dispatch, cities.length]);
 
   return (
     <Container>
