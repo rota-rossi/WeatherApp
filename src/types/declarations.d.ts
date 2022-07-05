@@ -1,4 +1,4 @@
 declare module '*.png' {
-  const value: ImageRequireSource;
+  const value: number;
   export = value;
 }

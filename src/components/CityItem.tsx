@@ -5,8 +5,9 @@ import styled from 'styled-components/native';
 import {useGetCurrentForecastQuery} from 'store/slices/api';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {WeatherIcon} from './WeatherIcon';
+import {currentForecastSelector} from 'src/store/slices/selectors';
 
-const Container = styled.View`
+const Container = styled.Pressable`
   width: 100%;
   display: flex;
   flex-flow: row;
@@ -65,31 +66,37 @@ const ArrowIcon = styled(Icon).attrs({name: 'chevron-right', size: 24})`
 
 type ScreenProps = {
   city: City;
+  handlePress: () => void;
 };
-const CityItem: FC<ScreenProps> = ({city}) => {
-  const {data: currentForecast, isSuccess} = useGetCurrentForecastQuery(city, {
-    pollingInterval: 60000,
-  });
+const CityItem: FC<ScreenProps> = ({city, handlePress}) => {
+  const {data: currentForecast, isSuccessCurrentForecast} =
+    useGetCurrentForecastQuery(city, {
+      pollingInterval: 60000,
+      selectFromResult: currentForecastSelector,
+    });
 
   return (
-    <Container>
-      {isSuccess && (
+    <Container
+      onPress={handlePress}
+      style={({pressed}) => ({opacity: pressed ? 0.6 : 1})}>
+      {isSuccessCurrentForecast && currentForecast.icon && (
         <ImageContainer>
-          <WeatherIcon icon={currentForecast.weather[0].icon as string} />
+          <WeatherIcon
+            icon={currentForecast.icon}
+            label={currentForecast.description}
+          />
         </ImageContainer>
       )}
       <MainTextContainer>
         <CityLabel>
           {city.name}, {city.state ? `${city.state}, ` : ''} {city.country}
         </CityLabel>
-        {isSuccess && (
+        {isSuccessCurrentForecast && (
           <SecondaryTextContainer>
             <TemperatureLabel>
-              🌡: {Number(currentForecast.main.temp).toFixed()}°C
+              🌡: {Number(currentForecast.temp).toFixed()}°C
             </TemperatureLabel>
-            <TemperatureLabel>
-              💧: {currentForecast.main.humidity}%
-            </TemperatureLabel>
+            <TemperatureLabel>💧: {currentForecast.humidity}%</TemperatureLabel>
           </SecondaryTextContainer>
         )}
       </MainTextContainer>

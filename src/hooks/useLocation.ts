@@ -16,12 +16,10 @@ export const useLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
         setLocation(position);
-        console.log(position);
       },
       error => {
         Alert.alert(`Code ${error.code}`, error.message);
         setLocation(undefined);
-        console.log(error);
       },
       {
         accuracy: {

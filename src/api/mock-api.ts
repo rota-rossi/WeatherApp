@@ -18,7 +18,6 @@ export const initializeMockServer = () => {
       this.get('/geo/1.0/direct', (_, request) => {
         const query = request.queryParams?.q;
         if (query) {
-          console.log({query});
           const [cityName, countryCode] = query.split(',');
           const response = cities.filter(
             city => city.name === cityName && city.country === countryCode,

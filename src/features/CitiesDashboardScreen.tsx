@@ -8,11 +8,12 @@ import {
 } from 'store/slices/cities';
 import styled from 'styled-components/native';
 import {getCityforLocationAPI} from 'src/api/weather';
-import {GeoPosition} from 'react-native-geolocation-service';
 import CityItem from 'src/components/CityItem';
 import {useSelector} from 'react-redux';
 import {City} from 'src/types/City';
 import {FlatList, ListRenderItem} from 'react-native';
+import {RootProps, RootStackRoutes} from 'src/types/RootStack';
+import {FC} from 'react';
 
 const Container = styled.SafeAreaView`
   width: 100%;
@@ -23,36 +24,37 @@ const Container = styled.SafeAreaView`
   background-color: white;
 `;
 
-const InnerContainer = styled(
-  // FlatList as new (props: FlatListProps<City>) => FlatList<City>,
-  FlatList<City>,
-)`
+const InnerContainer = styled(FlatList<City>)`
   width: 100%;
   height: 100%;
   display: flex;
   background-color: white;
 `;
+type ScreenProps = RootProps<RootStackRoutes.Home>;
 
-export const CitiesDashboardScreen = () => {
+export const CitiesDashboardScreen: FC<ScreenProps> = props => {
   const {location} = useLocation();
   const cities = useSelector(citiesSelector);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(actionGetCities());
-  }, [dispatch]);
-
-  useEffect(() => {
-    const retrieveCurrentCity = async (loc: GeoPosition) => {
-      const currentCity = await getCityforLocationAPI(loc);
-      dispatch(actionSetCurrentLocation(currentCity));
+    const getCities = async () => {
+      await dispatch(actionGetCities()).unwrap();
+      if (location) {
+        const currentCity = await getCityforLocationAPI(location);
+        dispatch(actionSetCurrentLocation(currentCity));
+      }
     };
-    if (location && cities.length > 0) {
-      retrieveCurrentCity(location);
-    }
-  }, [location, dispatch, cities.length]);
+    getCities();
+  }, [dispatch, location]);
 
-  const renderItem: ListRenderItem<City> = ({item}) => <CityItem city={item} />;
+  const handlePress = (city: City) => () => {
+    props.navigation.navigate(RootStackRoutes.DetailedForecast, {city});
+  };
+
+  const renderItem: ListRenderItem<City> = ({item}) => (
+    <CityItem city={item} handlePress={handlePress(item)} />
+  );
 
   return (
     <Container>

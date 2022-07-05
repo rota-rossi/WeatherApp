@@ -1,0 +1,13 @@
+diff --git a/node_modules/@reduxjs/toolkit/dist/query/react/buildHooks.d.ts b/node_modules/@reduxjs/toolkit/dist/query/react/buildHooks.d.ts
+index 0ddcaa8..d8194d6 100644
+--- a/node_modules/@reduxjs/toolkit/dist/query/react/buildHooks.d.ts
++++ b/node_modules/@reduxjs/toolkit/dist/query/react/buildHooks.d.ts
+@@ -262,7 +262,7 @@ declare type UseQueryStateBaseResult<D extends QueryDefinition<any, any, any, an
+      */
+     isError: false;
+ };
+-declare type UseQueryStateDefaultResult<D extends QueryDefinition<any, any, any, any>> = Id<Override<Extract<UseQueryStateBaseResult<D>, {
++export declare type UseQueryStateDefaultResult<D extends QueryDefinition<any, any, any, any>> = Id<Override<Extract<UseQueryStateBaseResult<D>, {
+     status: QueryStatus.uninitialized;
+ }>, {
+     isUninitialized: true;

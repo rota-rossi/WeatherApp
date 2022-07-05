@@ -46,15 +46,33 @@ const imageObj: ImageObj = {
   '50n': i50n,
 };
 
-const Image = styled.Image<{size?: number}>`
-  width: ${p => p.size ?? '40'}px;
-  height: ${p => p.size ?? '40'}px;
+const Image = styled.Image<{size: number}>`
+  width: ${p => p.size}px;
+  height: ${p => p.size}px;
 `;
 
 type Props = {
   icon: string;
   size?: number;
+  label?: string;
 };
-export const WeatherIcon: FC<Props> = props => (
-  <Image source={imageObj[props.icon]} size={props.size} />
+
+const Container = styled.View<{hasLabel: boolean; size: number}>`
+  width: ${p => p.size}px;
+  height: ${p => (p.hasLabel ? p.size * 1.4 : p.size)}px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px;
+`;
+
+const Label = styled.Text<{size: number}>`
+  font-size: ${p => p.size / 4}px;
+  line-height: ${p => p.size / 3}px; ;
+`;
+export const WeatherIcon: FC<Props> = ({icon, size = 40, label}) => (
+  <Container hasLabel={Boolean(label)} size={size}>
+    <Image source={imageObj[icon]} size={size} />
+    {label && <Label size={size}>{label}</Label>}
+  </Container>
 );
