@@ -134,7 +134,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.weatherapp"
+        applicationId "net.weblers.weatherapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
@@ -223,12 +223,10 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('WEATHERAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(WEATHERAPP_UPLOAD_STORE_FILE)
-                storePassword WEATHERAPP_UPLOAD_STORE_PASSWORD
-                keyAlias WEATHERAPP_UPLOAD_KEY_ALIAS
-                keyPassword WEATHERAPP_UPLOAD_KEY_PASSWORD
-            }
+                storeFile file('release.keystore')
+                storePassword System.getenv("WEATHERAPP_UPLOAD_STORE_PASSWORD")
+                keyAlias System.getenv("WEATHERAPP_UPLOAD_KEY_ALIAS")
+                keyPassword System.getenv("WEATHERAPP_UPLOAD_KEY_PASSWORD")
         }
     }
     buildTypes {
@@ -324,3 +322,6 @@ def isNewArchitectureEnabled() {
     // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
+
+// Font files
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"

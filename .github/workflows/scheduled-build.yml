@@ -1,0 +1,31 @@
+name: Scheduled Job
+
+on:
+  schedule:
+    - cron: '15 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  scheduled-job:
+    name: Interim Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.WEATHERAPP_RELEASE_KEYSTORE }}" > release.keystore.asc
+          gpg --batch --passphrase "${{ secrets.WEATHERAPP_UPLOAD_KEY_PASSWORD }}" -d -o android/app/release.keystore release.keystore.asc
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 'lts/*'
+      - name: Install Dependencies
+        run: yarn
+      - name: Release Interim build
+        env:
+          WEATHERAPP_UPLOAD_KEY_PASSWORD: ${{ secrets.WEATHERAPP_UPLOAD_KEY_PASSWORD }}
+          WEATHERAPP_UPLOAD_KEY_ALIAS: ${{ secrets.WEATHERAPP_UPLOAD_KEY_ALIAS }}
+          WEATHERAPP_UPLOAD_STORE_PASSWORD: ${{ secrets.WEATHERAPP_UPLOAD_STORE_PASSWORD }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release

@@ -3,9 +3,9 @@
 # exit if a command fails
 set -e
 
-NEW_VERSION_NAME=$1
+NEW_VERSION_NAME=`echo ${1} | sed 's/\-.*//g'`
 # to be generated using GH Action
-NEW_VERSION_CODE="${GITHUB_RUN_ID}${GITHUB_RUN_ATTEMPT}"
+NEW_VERSION_CODE=`date +%Y%m%d${GITHUB_RUN_ATTEMPT}`
 
 # Generates a version code that's versionName without dots.
 if [ -z "${NEW_VERSION_CODE}" ];
