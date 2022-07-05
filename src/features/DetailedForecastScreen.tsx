@@ -64,7 +64,6 @@ export const DetailedForecastScreen: FC<ScreenProps> = props => {
       selectFromResult: futureForecastSelector,
     });
 
-  console.log({futureForecasts});
   if (isLoadingFutureForecast || isLoadingCurrentForecast) {
     return <Spinner />;
   }
