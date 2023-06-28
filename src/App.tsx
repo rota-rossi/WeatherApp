@@ -22,7 +22,7 @@ const MainStack = () => (
       component={DetailedForecastScreen}
       options={props => ({
         title: props.route.params.city.name,
-        headerBackTitle: 'Back',
+        headerBackTitle: 'Return',
       })}
     />
   </Stack.Navigator>
